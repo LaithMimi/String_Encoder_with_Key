@@ -44,7 +44,7 @@ void encode(char str[], char key[], char e[], char* terms[]) {
             //printf("%d\t ", i);
             //printf("%c\t%c\n ", str[i], arr[i]);
             int res = (numericVal(str[i]) + numericVal(arr[i])) % 26;
-            e[i] = 'a' + res;
+            e[i] = res +'a';
         }
         else {
             
