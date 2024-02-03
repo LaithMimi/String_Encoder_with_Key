@@ -48,7 +48,7 @@ void encode(char str[], char key[], char e[], char* terms[]) {
         }
         else {
             
-            printf("%d\t ", i);
+            //printf("%d\t ", i);
             e[i] = str[i]; // to preserve the spaces
             
         }
