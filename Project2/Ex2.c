@@ -1,3 +1,4 @@
+#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <ctype.h>
@@ -37,14 +38,19 @@ void encode(char str[], char key[], char e[], char* terms[]) {
     int strLength = (int)strlen(str);
     char* arr = keyMethod(key);
 
-    for (int i = 0; i < strLength; i++) {
-
+    for (int i = 0; i < strLength;i++) {
+            
         if (isalpha(str[i])) {
+            printf("%d\t ", i);
+            printf("%c\t%c\n ", str[i], arr[i]);
             int res = (numericVal(str[i]) + numericVal(arr[i])) % 26;
             e[i] = 'a' + res;
         }
         else {
+            
+            printf("%d\t ", i);
             e[i] = str[i]; // to preserve the spaces
+            
         }
 
         terms[i] = &e[i];
@@ -62,6 +68,23 @@ void getIthElement(char e[], char* terms[], int i, char out[]) {
 
 
 
-void main() {
+int main() {
+    
+    char str[] = "World";
+    char key[] = "pob";
+    char e[50];
+    char* terms[50]; 
+
+    encode(str, key, e, terms);
+
+    printf("Original: %s\n", str);
+    printf("Encoded:  %s\n", e);
+
+ 
+    printf("Terms:\n");
+    for (int i = 0; e[i] != '\0'; i++) {
+        printf("terms[%d] points to %c (Address: %p)\n", i, *terms[i], (void*)terms[i]);
+    }
+
     return 0;
 }
