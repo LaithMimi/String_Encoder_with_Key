@@ -21,7 +21,7 @@ char* keyMethod(char key[]) {
 
     if (keyLength > 0) {
         for (int i = 0; i < MAX_TERMS - 1; i++) {
-            arr[i] = key[i % keyLength];
+            arr[i] = key[i % keyLength];//(to wrap around) the index in key[] goes back to the beginning when it exceeds the length of key[]
         }
         arr[MAX_TERMS - 1] = '\0';
     }
