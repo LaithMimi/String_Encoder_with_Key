@@ -41,8 +41,8 @@ void encode(char str[], char key[], char e[], char* terms[]) {
     for (int i = 0; i < strLength;i++) {
             
         if (isalpha(str[i])) {
-            printf("%d\t ", i);
-            printf("%c\t%c\n ", str[i], arr[i]);
+            //printf("%d\t ", i);
+            //printf("%c\t%c\n ", str[i], arr[i]);
             int res = (numericVal(str[i]) + numericVal(arr[i])) % 26;
             e[i] = 'a' + res;
         }
