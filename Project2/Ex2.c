@@ -8,7 +8,7 @@
 
 
 //to return the numeric values of the letters
-int numericVal(char c) { return tolower(c) - 'a'; } //Convert Character Case
+int numericVal(char c) { return tolower(c) - 'a'; }
 
 //this key method fills up an array with the key letters
 char* keyMethod(char key[]) {
