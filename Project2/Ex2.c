@@ -8,7 +8,7 @@
 
 
 //to return the numeric values of the letters
-int numericVal(char c) { return tolower(c) - 'a'; } //Convert Character Case
+int numericVal(char c) { return tolower(c) - 'a'; }
 
 //this key method fills up an array with the key letters
 char* keyMethod(char key[]) {
@@ -54,6 +54,15 @@ void encode(char str[], char key[], char e[], char* terms[]) {
             //printf("%d\t ", i);
             e[i] = str[i];// to preserve the spaces
           
+            //printf("%d\t ", i);
+            //printf("%c\t%c\n ", str[i], arr[i]);
+            int res = (numericVal(str[i]) + numericVal(arr[i])) % 26;
+            e[i] = res +'a';
+        }
+        else {
+            
+            //printf("%d\t ", i);
+            e[i] = str[i]; // to preserve the spaces
             
         }
         //for loop to point at each letter in the beginning of the word in a sentance;
@@ -115,9 +124,6 @@ int main() {
 
     printf("Original: %s\n", str);
     printf("Encoded:  %s\n", e);
-
- 
-   
 
     return 0;
 }
