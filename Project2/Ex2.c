@@ -82,6 +82,11 @@ void encode(char str[], char key[], char e[], char* terms[]) {
 
     int res;
     int j = 0;
+    int termsIndex = 0;
+
+    if (!isspace(str[0]))
+        terms[termsIndex++] = &e[0];
+
     //printf("%s\t%s %s %s %s  %s\t %s\n", "index", "str[i]", "num(str[i])", "arr[i]", "num(arr[i])", "res", "e[i]");
     for (int i = 0; i < strLength; i++) {
         int strNumericVal = numericVal(str[i]);
@@ -95,13 +100,12 @@ void encode(char str[], char key[], char e[], char* terms[]) {
         else {
             e[i] = str[i]; 
         }
-
-        //for loop to point at each letter in the beginning of the word in a sentance;
-       //terms[i] = &e[i];
+        if ((isspace(str[i]) || str[i] == '\0') && isalpha(str[i + 1]) && termsIndex < MAX_TERMS)
+            terms[termsIndex++] = &e[i];
     }
     e[strLength] = '\0'; 
-
-    terms[MAX_TERMS] = NULL;
+    for(int k=termsIndex ; k< MAX_TERMS ; K++)
+    terms[k] = NULL;
 
     free(arr);
 }
