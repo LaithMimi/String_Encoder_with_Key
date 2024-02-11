@@ -1,3 +1,5 @@
+//213923931
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -21,7 +23,7 @@ char* keyMethod(char key[]) {
 
     if (keyLength > 0) {
         for (int i = 0; i < MAX_TERMS - 1; i++) {
-           
+
             arr[i] = key[i % keyLength];//(to wrap around) -the index in key[] goes back to the beginning when it exceeds the length of key[]
         }
         arr[MAX_TERMS - 1] = '\0';
@@ -34,11 +36,10 @@ char* keyMethod(char key[]) {
 }
 
 
-/* --------------------------------------------Wrong Code----------------------------------------------------------------
 void encode(char str[], char key[], char e[], char* terms[]) {
     int strLength = (int)strlen(str);
     int arrLength = strlen(key);
-    char* arr = keyMethod(key); 
+    char* arr = keyMethod(key);
 
 
     int res;
@@ -50,67 +51,55 @@ void encode(char str[], char key[], char e[], char* terms[]) {
 
     //printf("%s\t%s %s %s %s  %s\t %s\n", "index", "str[i]", "num(str[i])", "arr[i]", "num(arr[i])", "res", "e[i]");
     for (int i = 0; i < strLength; i++) {
-      
+
         if (isalpha(str[i])) {
-            printf("%d\t ", i);
-            printf("%c\t%c\n ", str[i], arr[i]);
-            int res = (numericVal(str[i]) + numericVal(arr[i])) % 26;
-            e[i] = 'a' + res;
-        }
-        else {
-            
-            printf("%d\t ", i);
-            e[i] = str[i]; // to preserve the spaces
-            
-        }
-
-        terms[i] = &e[i];
-    }
-    e[strLength] = '\0'; 
-    for(int k=termsIndex ; k< MAX_TERMS ; k++)
-        terms[k] = NULL;
-
-    free(arr);
-}*/
-void encode(char str[], char key[], char e[], char* terms[]) {
-    int strLength = (int)strlen(str);
-    int arrLength = strlen(key);
-    char* arr = keyMethod(key); 
-
-
-    int res;
-    int j = 0;
-    //printf("%s\t%s %s %s %s  %s\t %s\n", "index", "str[i]", "num(str[i])", "arr[i]", "num(arr[i])", "res", "e[i]");
-    for (int i = 0; i < strLength; i++) {
-        int strNumericVal = numericVal(str[i]);
-        int arrNumericVal = numericVal(arr[j % arrLength]);
-        if (isalpha(str[i])) {
-            res = (strNumericVal + arrNumericVal) % 26;
+            res = (numericVal(str[i]) + numericVal(arr[j % arrLength])) % 26;
             e[i] = res + 'a';
             j++; // increase if letter only
             //printf("%d\t%c\t%d\t   %c\t  %d\t        %d\t  %c\n ", i, str[i], numericVal(str[i]), arr[i], numericVal(arr[i]), res, e[i]);
         }
         else {
-            e[i] = str[i]; 
-        }
 
-        //for loop to point at each letter in the beginning of the word in a sentance;
-       //terms[i] = &e[i];
+            e[i] = str[i];
+        }
+        if ((isspace(str[i]) || str[i] == '\0') && isalpha(str[i + 1]) && termsIndex < MAX_TERMS)
+            terms[termsIndex++] = &e[i + 1];
     }
+    e[strLength] = '\0';
+
+
+    for (int k = termsIndex; k < MAX_TERMS; k++)
+        terms[k] = NULL;
+
+    free(arr);
+}
 
 
 void getIthElement(char e[], char* terms[], int i, char out[]) {
-
+    if (terms[i] != NULL) {
+        // Copy the ith term into the output array
+        // Assuming that words are space-delimited and terms array is properly populated
+        int j = 0;
+        while (terms[i][j] && terms[i][j] != ' ') {
+            out[j] = terms[i][j];
+            j++;
+        }
+        out[j] = '\0'; // Null-terminate the output string
+    }
+    else {
+        // If i is out of bounds, set out to an empty string
+        out[0] = '\0';
+    }
 }
 
 
 
 int main() {
-    
+
     char str[] = "Ritaj is my bestFriend";
     char key[] = "queen";
     char e[MAX_STR];
-    char* terms[MAX_TERMS]; 
+    char* terms[MAX_TERMS];
 
     encode(str, key, e, terms);
 
@@ -119,9 +108,9 @@ int main() {
     printf("Encoded:  %s\n", e);
 
 
-       printf("Terms:\n");
+    printf("Terms:\n");
     for (int i = 0; terms[i] != NULL; i++) { // Assuming terms array is null-terminated
-        printf("terms[%d] points to %c (Address: %p)\n", i, *terms[i], (void*)terms[i]);
+        printf("terms[%d] points to %c (Address: %p)\n", i, terms[i], (void)terms[i]);
     }
     return 0;
 }
