@@ -34,46 +34,6 @@ char* keyMethod(char key[]) {
 }
 
 
-/* --------------------------------------------Wrong Code----------------------------------------------------------------
-void encode(char str[], char key[], char e[], char* terms[]) {
-
-    int strLength = (int)strlen(str);
-    char* arr = keyMethod(key);
-
-    int res ;
-    printf("%s\t%s %s %s %s  %s\t %s\n", "index", "str[i]", "num(str[i])", "arr[i]", "num(arr[i])", "res", "e[i]");
-    for (int i = 0; i < strLength;i++) {
-        res = 0;
-        if (isalpha(str[i])) {
-            res = (numericVal(str[i]) + numericVal(arr[i])) % 26;
-            e[i] = res +'a';
-      
-            printf("%d\t%c\t%d\t   %c\t  %d\t        %d\t  %c\n ",i , str[i], numericVal(str[i]), arr[i], numericVal(arr[i]),res,e[i]);
-        }
-        else {
-            //printf("%d\t ", i);
-            e[i] = str[i];// to preserve the spaces
-          
-            //printf("%d\t ", i);
-            //printf("%c\t%c\n ", str[i], arr[i]);
-            int res = (numericVal(str[i]) + numericVal(arr[i])) % 26;
-            e[i] = res +'a';
-        }
-        else {
-            
-            //printf("%d\t ", i);
-            e[i] = str[i]; // to preserve the spaces
-            
-        }
-        //for loop to point at each letter in the beginning of the word in a sentance;
-        //terms[i] = &e[i];
-    }
-    e[strLength] = '\0';
-
-    terms[MAX_TERMS] = NULL;
-
-    free(arr);
-}*/
 void encode(char str[], char key[], char e[], char* terms[]) {
     int strLength = (int)strlen(str);
     int arrLength = strlen(key);
@@ -89,10 +49,9 @@ void encode(char str[], char key[], char e[], char* terms[]) {
 
     //printf("%s\t%s %s %s %s  %s\t %s\n", "index", "str[i]", "num(str[i])", "arr[i]", "num(arr[i])", "res", "e[i]");
     for (int i = 0; i < strLength; i++) {
-        int strNumericVal = numericVal(str[i]);
-        int arrNumericVal = numericVal(arr[j % arrLength]);
+      
         if (isalpha(str[i])) {
-            res = (strNumericVal + arrNumericVal) % 26;
+            res = ( numericVal(str[i]) + numericVal(arr[j % arrLength]) ) % 26;
             e[i] = res + 'a';
             j++; // increase if letter only
             //printf("%d\t%c\t%d\t   %c\t  %d\t        %d\t  %c\n ", i, str[i], numericVal(str[i]), arr[i], numericVal(arr[i]), res, e[i]);
@@ -101,11 +60,11 @@ void encode(char str[], char key[], char e[], char* terms[]) {
             e[i] = str[i]; 
         }
         if ((isspace(str[i]) || str[i] == '\0') && isalpha(str[i + 1]) && termsIndex < MAX_TERMS)
-            terms[termsIndex++] = &e[i];
+            terms[termsIndex++] = &e[i+1];
     }
     e[strLength] = '\0'; 
-    for(int k=termsIndex ; k< MAX_TERMS ; K++)
-    terms[k] = NULL;
+    for(int k=termsIndex ; k< MAX_TERMS ; k++)
+        terms[k] = NULL;
 
     free(arr);
 }
@@ -119,15 +78,21 @@ void getIthElement(char e[], char* terms[], int i, char out[]) {
 
 int main() {
     
-    char str[] = "el barmjeh 5ra";
-    char key[] = "shit";
-    char e[50];
-    char* terms[50]; 
+    char str[] = "Ritaj is my bestFriend";
+    char key[] = "queen";
+    char e[MAX_STR];
+    char* terms[MAX_TERMS]; 
 
     encode(str, key, e, terms);
 
     printf("Original: %s\n", str);
+    printf("Key: %s\n", key);
     printf("Encoded:  %s\n", e);
 
+
+       printf("Terms:\n");
+    for (int i = 0; terms[i] != NULL; i++) { // Assuming terms array is null-terminated
+        printf("terms[%d] points to %c (Address: %p)\n", i, *terms[i], (void*)terms[i]);
+    }
     return 0;
 }
