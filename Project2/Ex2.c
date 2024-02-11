@@ -34,6 +34,7 @@ char* keyMethod(char key[]) {
 }
 
 
+/* --------------------------------------------Wrong Code----------------------------------------------------------------
 void encode(char str[], char key[], char e[], char* terms[]) {
     int strLength = (int)strlen(str);
     int arrLength = strlen(key);
@@ -51,7 +52,40 @@ void encode(char str[], char key[], char e[], char* terms[]) {
     for (int i = 0; i < strLength; i++) {
       
         if (isalpha(str[i])) {
-            res = ( numericVal(str[i]) + numericVal(arr[j % arrLength]) ) % 26;
+            printf("%d\t ", i);
+            printf("%c\t%c\n ", str[i], arr[i]);
+            int res = (numericVal(str[i]) + numericVal(arr[i])) % 26;
+            e[i] = 'a' + res;
+        }
+        else {
+            
+            printf("%d\t ", i);
+            e[i] = str[i]; // to preserve the spaces
+            
+        }
+
+        terms[i] = &e[i];
+    }
+    e[strLength] = '\0'; 
+    for(int k=termsIndex ; k< MAX_TERMS ; k++)
+        terms[k] = NULL;
+
+    free(arr);
+}*/
+void encode(char str[], char key[], char e[], char* terms[]) {
+    int strLength = (int)strlen(str);
+    int arrLength = strlen(key);
+    char* arr = keyMethod(key); 
+
+
+    int res;
+    int j = 0;
+    //printf("%s\t%s %s %s %s  %s\t %s\n", "index", "str[i]", "num(str[i])", "arr[i]", "num(arr[i])", "res", "e[i]");
+    for (int i = 0; i < strLength; i++) {
+        int strNumericVal = numericVal(str[i]);
+        int arrNumericVal = numericVal(arr[j % arrLength]);
+        if (isalpha(str[i])) {
+            res = (strNumericVal + arrNumericVal) % 26;
             e[i] = res + 'a';
             j++; // increase if letter only
             //printf("%d\t%c\t%d\t   %c\t  %d\t        %d\t  %c\n ", i, str[i], numericVal(str[i]), arr[i], numericVal(arr[i]), res, e[i]);
@@ -59,15 +93,10 @@ void encode(char str[], char key[], char e[], char* terms[]) {
         else {
             e[i] = str[i]; 
         }
-        if ((isspace(str[i]) || str[i] == '\0') && isalpha(str[i + 1]) && termsIndex < MAX_TERMS)
-            terms[termsIndex++] = &e[i+1];
-    }
-    e[strLength] = '\0'; 
-    for(int k=termsIndex ; k< MAX_TERMS ; k++)
-        terms[k] = NULL;
 
-    free(arr);
-}
+        //for loop to point at each letter in the beginning of the word in a sentance;
+       //terms[i] = &e[i];
+    }
 
 
 void getIthElement(char e[], char* terms[], int i, char out[]) {
