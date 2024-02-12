@@ -8,6 +8,8 @@
 #define MAX_TERMS 20
 #define MAX_STR 200
 
+void encode(char str[], char key[], char e[], char* terms[]);
+void getIthElement(char e[], char* terms[], int i, char out[]);
 
 //to return the numeric values of the letters
 int numericVal(char c) { return tolower(c) - 'a'; }
@@ -35,10 +37,9 @@ char* keyMethod(char key[]) {
     return arr;
 }
 
-
 void encode(char str[], char key[], char e[], char* terms[]) {
     int strLength = (int)strlen(str);
-    int arrLength = (int)strlen(key);
+    int keyLength = (int)strlen(key);
     char* arr = keyMethod(key);
 
 
@@ -46,34 +47,37 @@ void encode(char str[], char key[], char e[], char* terms[]) {
     int j = 0;
     int termsIndex = 0;
 
+    if (keyLength == NULL)
+        return str;
+    else {
         if (!isspace(str[0]))
             terms[termsIndex++] = &e[0];
 
-    //printf("%s\t%s %s %s %s  %s\t %s\n", "index", "str[i]", "num(str[i])", "arr[i]", "num(arr[i])", "res", "e[i]");
-    for (int i = 0; i < strLength; i++) {
+        //printf("%s\t%s %s %s %s  %s\t %s\n", "index", "str[i]", "num(str[i])", "arr[i]", "num(arr[i])", "res", "e[i]");
+        for (int i = 0; i < strLength; i++) {
 
-        if (isalpha(str[i])) {
-            res = (numericVal(str[i]) + numericVal(arr[j % arrLength])) % 26;
-            e[i] = res + 'a';
-            j++; // increase if letter only
-            //printf("%d\t%c\t%d\t   %c\t  %d\t        %d\t  %c\n ", i, str[i], numericVal(str[i]), arr[i], numericVal(arr[i]), res, e[i]);
-        }
-        else {
+            if (isalpha(str[i])) {
+                res = (numericVal(str[i]) + numericVal(arr[j % keyLength])) % 26;
+                e[i] = res + 'a';
+                j++; //increase if letter only
+                //printf("%d\t%c\t%d\t   %c\t  %d\t        %d\t  %c\n ", i, str[i], numericVal(str[i]), arr[i], numericVal(arr[i]), res, e[i]);
+            }
+            else {
 
-            e[i] = str[i];
+                e[i] = str[i];
+            }
+            if ((isspace(str[i]) || str[i] == '\0') && isalpha(str[i + 1]) && termsIndex < MAX_TERMS)
+                terms[termsIndex++] = &e[i + 1];
         }
-        if ((isspace(str[i]) || str[i] == '\0') && isalpha(str[i + 1]) && termsIndex < MAX_TERMS)
-            terms[termsIndex++] = &e[i + 1];
+        e[strLength] = '\0';
+
+
+        for (int k = termsIndex; k < MAX_TERMS; k++)
+            terms[k] = NULL;
+
+        free(arr);
     }
-    e[strLength] = '\0';
-
-
-    for (int k = termsIndex; k < MAX_TERMS; k++)
-        terms[k] = NULL;
-
-    free(arr);
 }
-
 
 void getIthElement(char e[], char* terms[], int i, char out[]) {
     
@@ -82,7 +86,7 @@ void getIthElement(char e[], char* terms[], int i, char out[]) {
         char* termsPtr = terms[i];
         int j = 0;
         
-        while (termsPtr[j] != '\0' && termsPtr[j] != ' ') { //to read letter by letter and stop at a space or when all letters end.
+        while (termsPtr[j] != '\0' && !isspace(termsPtr[j])) { //to read letter by letter and stop at a space || when all letters end.
             out[j] = termsPtr[j];
             j++;
         }
@@ -95,10 +99,10 @@ void getIthElement(char e[], char* terms[], int i, char out[]) {
 
 
 
-int main() {
+/*int main() {
 
     char str[] = "laith Is Hardworker";
-    char key[] = "";
+    char key[] = "Bravo";
     char e[MAX_STR];
     char* terms[MAX_TERMS];
 
@@ -112,7 +116,6 @@ int main() {
     for(int i=0 ;terms[i]!=NULL;i++)
         printf("terms[%d] points to %c (Address: %p)\n", i, *terms[i], (void*)terms[i]);
 
-   // char* terms[5] = { &e[0], &e[8], &e[15], &e[21], NULL };  // Pointers to the start of each word
     char out[50];
 
     // Test the getIthElement function
@@ -126,4 +129,4 @@ int main() {
     }
     
     return 0;
-}
+}*/
