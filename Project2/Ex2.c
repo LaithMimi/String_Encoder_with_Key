@@ -38,7 +38,7 @@ char* keyMethod(char key[]) {
 
 void encode(char str[], char key[], char e[], char* terms[]) {
     int strLength = (int)strlen(str);
-    int arrLength = strlen(key);
+    int arrLength = (int)strlen(key);
     char* arr = keyMethod(key);
 
 
@@ -46,8 +46,8 @@ void encode(char str[], char key[], char e[], char* terms[]) {
     int j = 0;
     int termsIndex = 0;
 
-    if (!isspace(str[0]))
-        terms[termsIndex++] = &e[0];
+        if (!isspace(str[0]))
+            terms[termsIndex++] = &e[0];
 
     //printf("%s\t%s %s %s %s  %s\t %s\n", "index", "str[i]", "num(str[i])", "arr[i]", "num(arr[i])", "res", "e[i]");
     for (int i = 0; i < strLength; i++) {
@@ -76,28 +76,29 @@ void encode(char str[], char key[], char e[], char* terms[]) {
 
 
 void getIthElement(char e[], char* terms[], int i, char out[]) {
+    
     if (terms[i] != NULL) {
-        // Copy the ith term into the output array
-        // Assuming that words are space-delimited and terms array is properly populated
+
+        char* termsPtr = terms[i];
         int j = 0;
-        while (terms[i][j] && terms[i][j] != ' ') {
-            out[j] = terms[i][j];
+        
+        while (termsPtr[j] != '\0' && termsPtr[j] != ' ') { //to read letter by letter and stop at a space or when all letters end.
+            out[j] = termsPtr[j];
             j++;
         }
-        out[j] = '\0'; // Null-terminate the output string
+        out[j] = '\0'; 
     }
-    else {
-        // If i is out of bounds, set out to an empty string
+    else 
         out[0] = '\0';
-    }
+    
 }
 
 
 
 int main() {
 
-    char str[] = "Ritaj is my bestFriend";
-    char key[] = "queen";
+    char str[] = "laith Is Hardworker";
+    char key[] = "";
     char e[MAX_STR];
     char* terms[MAX_TERMS];
 
@@ -107,10 +108,22 @@ int main() {
     printf("Key: %s\n", key);
     printf("Encoded:  %s\n", e);
 
+    printf("terms:\n");
+    for(int i=0 ;terms[i]!=NULL;i++)
+        printf("terms[%d] points to %c (Address: %p)\n", i, *terms[i], (void*)terms[i]);
 
-    printf("Terms:\n");
-    for (int i = 0; terms[i] != NULL; i++) { // Assuming terms array is null-terminated
-        printf("terms[%d] points to %c (Address: %p)\n", i, terms[i], (void)terms[i]);
+   // char* terms[5] = { &e[0], &e[8], &e[15], &e[21], NULL };  // Pointers to the start of each word
+    char out[50];
+
+    // Test the getIthElement function
+    for (int i = 0; i < 5; ++i) {
+        getIthElement(e, terms, i, out);
+        if (out[0] != '\0') {
+            printf("The %dth term is '%s'\n", i, out);
+        }
+        else break;
+           
     }
+    
     return 0;
 }
